@@ -1,0 +1,8 @@
+Academic Life Dashboard
+
+This software is provided for personal use. By installing, you agree
+to use it at your own discretion. No warranty is provided.
+
+You can edit this text (build/license.txt) to whatever you'd like
+shown on the installer's license screen — or set "license" to null
+in package.json's nsis config to skip that screen entirely.

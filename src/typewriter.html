@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Typewriter Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="typewriter.css">
+</head>
+<body class="bg-transparent h-screen overflow-hidden flex flex-col font-mono select-none">
+  <div id="typewriter-frame" class="bg-transparent">
+    <!-- Confetti layer -->
+    <div id="confetti-container"></div>
+
+    <!-- Paper Container (slides up through slot) -->
+    <div id="paper-slot-mask" class="no-drag">
+      <div id="paper" class="paper hidden">
+        <div id="paper-content">
+          <div id="paper-header">
+            <div id="paper-title" class="text-pixel-base">··· PLAN TITLE ···</div>
+            <div class="divider-dotted"></div>
+          </div>
+          <div id="paper-body">
+            <!-- Rendered tasks & sections go here -->
+          </div>
+          <div id="all-done-banner" class="all-done-banner hidden text-center text-red-500 text-pixel-base font-bold mt-4">
+            ALL DONE ✓
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Typewriter Machine Shell (Draggable Area) -->
+    <div id="typewriter-machine" class="draggable">
+      <!-- Top Roller Section -->
+      <div id="top-section" class="draggable">
+        <div id="roller-bar" class="draggable">
+          <div id="paper-slot" class="draggable"></div>
+        </div>
+      </div>
+
+      <!-- Main Red Body (Draggable Background) -->
+      <div id="typewriter-body" class="draggable">
+        
+        <!-- Status Bar (No-Drag to click buttons) -->
+        <div id="status-bar" class="no-drag text-pixel-xs">
+          <button id="btn-plus" class="btn-pixel text-pixel-xs" title="New / Add Tasks">+</button>
+          <div id="status-progress" class="status-center text-center font-bold text-pixel-xs">0/0 done</div>
+          <div class="status-right flex items-center space-x-2">
+            <button id="btn-view-toggle" class="btn-pixel text-pixel-xs" title="Toggle view">≡</button>
+            <button id="btn-sound-toggle" class="btn-pixel" title="Toggle sound">♪</button>
+          </div>
+        </div>
+
+        <!-- Idle Drag/Paste Panel (No-Drag to interact) -->
+        <div id="idle-panel" class="no-drag">
+          <div id="idle-text" class="text-center text-pixel-xs text-ink font-bold">type your plan...<span class="cursor">|</span></div>
+          <div id="idle-sub" class="text-center text-pixel-xs text-gray-500 mt-1 uppercase font-bold">Drop .md or paste (⌘V)</div>
+        </div>
+
+        <!-- Pixel Keyboard (No-Drag to press keys) -->
+        <div id="keyboard" class="no-drag">
+          <div class="kb-row">
+            <div class="key">1</div><div class="key">2</div><div class="key">3</div>
+            <div class="key">4</div><div class="key">5</div><div class="key">6</div>
+            <div class="key">7</div><div class="key">8</div><div class="key">9</div>
+            <div class="key">0</div>
+          </div>
+          <div class="kb-row">
+            <div class="key">Q</div><div class="key">W</div><div class="key">E</div>
+            <div class="key">R</div><div class="key">T</div><div class="key">U</div>
+            <div class="key">I</div><div class="key">O</div><div class="key">P</div>
+          </div>
+          <div class="kb-row">
+            <div class="key">A</div><div class="key">S</div><div class="key">D</div>
+            <div class="key">G</div><div class="key">H</div><div class="key">J</div>
+            <div class="key">K</div><div class="key">L</div>
+          </div>
+          <div class="kb-row">
+            <div class="key">Z</div><div class="key">X</div><div class="key">C</div>
+            <div class="key">V</div><div class="key">B</div><div class="key">N</div>
+            <div class="key">M</div><div class="key text-red-500">!</div><div class="key text-red-500">?</div>
+          </div>
+          <div class="kb-row">
+            <div class="key key-space"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 1. Add / Edit Plan Modal -->
+    <div id="modal-add-plan" class="modal-overlay hidden">
+      <div class="modal-box no-drag">
+        <div class="modal-title font-bold text-pixel-base text-[#C1443C]">+ NEW / EDIT PLAN</div>
+        <textarea id="plan-input-textarea" class="pixel-textarea text-pixel-xs" placeholder="# Plan Title&#10;&#10;## Section&#10;- [ ] Task 1&#10;- [ ] Task 2"></textarea>
+        <div class="modal-actions mt-2 flex justify-end space-x-2">
+          <button id="btn-plan-load" class="pixel-btn primary text-pixel-xs bg-[#C1443C] text-cream p-1.5 font-bold uppercase">load</button>
+          <button id="btn-plan-cancel" class="pixel-btn text-pixel-xs bg-cream text-ink p-1.5 font-bold uppercase">cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Completion Session Note Modal -->
+    <div id="modal-completion" class="modal-overlay hidden">
+      <div class="modal-box no-drag">
+        <div class="modal-title font-bold text-[#C1443C] text-pixel-base">✓ plan complete</div>
+        <div class="modal-desc text-pixel-xs text-ink font-bold mb-1">add a session note?</div>
+        <textarea id="session-note-input" class="pixel-textarea text-pixel-xs" placeholder="what did you learn? what was hard?"></textarea>
+        <div class="modal-actions mt-2 flex justify-end space-x-2">
+          <button id="btn-complete-save" class="pixel-btn primary text-pixel-xs bg-[#C1443C] text-cream p-1.5 font-bold uppercase">save + sync</button>
+          <button id="btn-complete-skip" class="pixel-btn text-pixel-xs bg-cream text-ink p-1.5 font-bold uppercase">skip</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Abort Modal -->
+    <div id="modal-abort" class="modal-overlay hidden">
+      <div class="modal-box no-drag">
+        <div class="modal-title font-bold text-[#C1443C] text-pixel-base">✕ abort plan?</div>
+        <div class="modal-desc text-pixel-xs text-ink font-bold mb-3">log progress or discard current custom plan?</div>
+        <div class="modal-actions flex justify-end space-x-2">
+          <button id="btn-abort-log" class="pixel-btn primary text-pixel-xs bg-[#C1443C] text-cream p-1.5 font-bold uppercase">log progress</button>
+          <button id="btn-abort-discard" class="pixel-btn text-pixel-xs bg-red-500 text-cream p-1.5 font-bold uppercase">discard</button>
+          <button id="btn-abort-cancel" class="pixel-btn text-pixel-xs bg-cream text-ink p-1.5 font-bold uppercase">cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="typewriter-renderer.js"></script>
+</body>
+</html>

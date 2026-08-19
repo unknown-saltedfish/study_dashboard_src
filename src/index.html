@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Life Dashboard — Typewriter Edition</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['"Press Start 2P"', 'Courier', 'monospace']
+          },
+          fontSize: {
+            'pixel-xs': '11px',
+            'pixel-sm': '12px',
+            'pixel-base': '13px',
+            'pixel-md': '14px',
+            'pixel-lg': '16px'
+          },
+          colors: {
+            desk: {
+              950: '#111111',
+              900: '#1a1a1a',
+              850: '#222222',
+              700: '#444444',
+              600: '#888888',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="h-screen overflow-hidden flex flex-col font-mono">
+  <div id="root" class="h-full flex flex-col"></div>
+  <script type="text/babel" src="renderer.js"></script>
+</body>
+</html>
